@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Inbox</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Top bar -->
+  <header class="topbar">
+    <div class="topbar-logo">Smart<span>Inbox</span></div>
+    <span class="topbar-subtitle">Prioritised · Labelled · Draft-ready</span>
+  </header>
+
+  <!-- Main layout -->
+  <div class="app-layout">
+
+    <!-- Sidebar filter -->
+    <aside class="sidebar">
+      <div class="sidebar-title">Filter by label</div>
+      <div id="sidebar-filters"></div>
+    </aside>
+
+    <!-- Email list -->
+    <section class="email-list-pane">
+      <div class="pane-header">Inbox — sorted by priority</div>
+      <div id="email-list"></div>
+    </section>
+
+    <!-- Email detail + draft -->
+    <main class="email-detail-pane" id="email-detail">
+      <div class="placeholder">Select an email to read it.</div>
+    </main>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
