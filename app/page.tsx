@@ -152,8 +152,11 @@ export default function Home() {
   const LabelPill = ({ email, size = "sm" }: { email: Email; size?: "sm" | "md" }) => {
     const s = getLabelStyle(email.label, customTags);
     return (
-      <button
+      <span
         onClick={(e) => openTagPopover(e, email.id, email.label)}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") openTagPopover(e as unknown as React.MouseEvent, email.id, email.label); }}
         className="rounded-full border flex-shrink-0 font-semibold transition-all hover:brightness-95 cursor-pointer"
         style={{
           background: s.bg,
@@ -165,7 +168,7 @@ export default function Home() {
         title="Click to change label"
       >
         {size === "sm" ? s.short : email.label}
-      </button>
+      </span>
     );
   };
 
