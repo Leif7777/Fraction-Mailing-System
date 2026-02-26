@@ -15,6 +15,12 @@ interface TagPopoverState {
   position: { top: number; left: number };
 }
 
+const USERS = [
+  { name: "Leif", role: "Sales Associate", initial: "L" },
+  { name: "Jordan", role: "Sales Associate", initial: "J" },
+  { name: "Maya", role: "Director of Sales", initial: "M" },
+];
+
 export default function Home() {
   // ── Core email state ──
   const [emails, setEmails] = useState<Email[]>(sampleEmails);
@@ -40,6 +46,10 @@ export default function Home() {
 
   // ── Toast ──
   const [toast, setToast] = useState<ToastData | null>(null);
+
+  // ── Profile menu ──
+  const [currentUser, setCurrentUser] = useState(USERS[0]);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   // ── Analyze ──
   const analyze = async () => {
@@ -264,14 +274,53 @@ export default function Home() {
         </nav>
 
         {/* Profile */}
-        <div className="px-4 py-4 border-t" style={{ borderColor: "var(--fraction-border)" }}>
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold" style={{ background: "var(--fraction-green)", color: "#fff" }}>L</div>
-            <div>
-              <p className="text-sm font-semibold" style={{ color: "var(--fraction-dark)" }}>Leif</p>
-              <p className="text-xs" style={{ color: "var(--fraction-muted)" }}>Sales Associate</p>
+        <div className="px-4 py-4 border-t relative" style={{ borderColor: "var(--fraction-border)" }}>
+          {showProfileMenu && (
+            <>
+              <div className="fixed inset-0 z-10" onClick={() => setShowProfileMenu(false)} />
+              <div className="absolute bottom-full left-0 right-0 mb-1 mx-0 rounded-xl shadow-lg border overflow-hidden z-20" style={{ background: "#fff", borderColor: "var(--fraction-border)" }}>
+                <div className="px-3 py-2 border-b" style={{ borderColor: "var(--fraction-border)" }}>
+                  <p className="text-xs font-semibold" style={{ color: "var(--fraction-muted)" }}>Switch account</p>
+                </div>
+                {USERS.map((user) => (
+                  <button key={user.name} onClick={() => { setCurrentUser(user); setShowProfileMenu(false); }} className="w-full text-left px-3 py-2.5 flex items-center gap-2.5 hover:bg-gray-50 transition-colors">
+                    <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold flex-shrink-0" style={{ background: currentUser.name === user.name ? "var(--fraction-green)" : "#e5e7eb", color: currentUser.name === user.name ? "#fff" : "var(--fraction-dark)" }}>
+                      {user.initial}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold truncate" style={{ color: "var(--fraction-dark)" }}>{user.name}</p>
+                      <p className="text-xs truncate" style={{ color: "var(--fraction-muted)" }}>{user.role}</p>
+                    </div>
+                    {currentUser.name === user.name && (
+                      <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ color: "var(--fraction-green)" }}>
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                      </svg>
+                    )}
+                  </button>
+                ))}
+                <div className="border-t" style={{ borderColor: "var(--fraction-border)" }}>
+                  <button onClick={() => { setShowProfileMenu(false); setToast({ message: "Logged out successfully", type: "success" }); }} className="w-full text-left px-3 py-2.5 flex items-center gap-2.5 hover:bg-gray-50 transition-colors">
+                    <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ color: "var(--fraction-muted)" }}>
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
+                    <span className="text-sm" style={{ color: "var(--fraction-muted)" }}>Log out</span>
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
+          <button onClick={() => setShowProfileMenu(!showProfileMenu)} className="w-full flex items-center gap-2.5 rounded-lg p-1.5 -m-1.5 hover:bg-gray-50 transition-colors">
+            <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold flex-shrink-0" style={{ background: "var(--fraction-green)", color: "#fff" }}>
+              {currentUser.initial}
             </div>
-          </div>
+            <div className="flex-1 text-left min-w-0">
+              <p className="text-sm font-semibold truncate" style={{ color: "var(--fraction-dark)" }}>{currentUser.name}</p>
+              <p className="text-xs truncate" style={{ color: "var(--fraction-muted)" }}>{currentUser.role}</p>
+            </div>
+            <svg className="w-4 h-4 flex-shrink-0 transition-transform" style={{ color: "var(--fraction-muted)", transform: showProfileMenu ? "rotate(180deg)" : undefined }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+            </svg>
+          </button>
         </div>
       </aside>
 
