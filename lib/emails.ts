@@ -8,7 +8,7 @@ export interface Email {
   body: string;
   time: string;
   read: boolean;
-  label?: EmailLabel;
+  label: EmailLabel;
   draft?: string;
 }
 
@@ -30,6 +30,7 @@ Urgently yours,
 Margaret Osei`,
     time: "9:14 AM",
     read: false,
+    label: "Urgent",
   },
   {
     id: "2",
@@ -49,6 +50,7 @@ Daniel Reyes
 Senior Broker, Keystone Realty`,
     time: "8:52 AM",
     read: false,
+    label: "Needs Reply",
   },
   {
     id: "3",
@@ -67,6 +69,7 @@ Thanks,
 Sofia Marchetti`,
     time: "8:30 AM",
     read: false,
+    label: "Needs Reply",
   },
   {
     id: "4",
@@ -84,6 +87,7 @@ Should be a strong one — similar Scottsdale listings sold out in under 3 weeks
 - Alex`,
     time: "Yesterday",
     read: false,
+    label: "Urgent",
   },
   {
     id: "5",
@@ -106,6 +110,7 @@ James Whitfield
 Managing Partner, LP Investors Group`,
     time: "Yesterday",
     read: false,
+    label: "Needs Reply",
   },
   {
     id: "6",
@@ -124,6 +129,7 @@ Thanks!
 Priya`,
     time: "Yesterday",
     read: false,
+    label: "Needs Reply",
   },
   {
     id: "7",
@@ -140,6 +146,7 @@ Thanks,
 Robert Chang`,
     time: "Feb 24",
     read: false,
+    label: "Needs Reply",
   },
   {
     id: "8",
@@ -159,6 +166,7 @@ Read the full issue at proptechinsider.com
 Manage preferences | Unsubscribe`,
     time: "Feb 23",
     read: true,
+    label: "FYI",
   },
   {
     id: "9",
@@ -178,6 +186,7 @@ Rachel Torres
 Summit Director`,
     time: "Feb 22",
     read: false,
+    label: "Needs Reply",
   },
   {
     id: "10",
@@ -199,5 +208,6 @@ Don't miss out — offer expires Sunday!
 Unsubscribe | This is a promotional email`,
     time: "Feb 21",
     read: true,
+    label: "Ignore",
   },
 ];

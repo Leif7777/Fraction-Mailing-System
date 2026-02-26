@@ -206,7 +206,7 @@ export default function Home() {
                   {f !== "All" && (
                     <span
                       className="w-2 h-2 rounded-full flex-shrink-0"
-                      style={{ background: f !== "All" ? labelConfig[f as EmailLabel].dot : undefined }}
+                      style={{ background: labelConfig[f as EmailLabel].dot }}
                     />
                   )}
                   <span>{f}</span>
