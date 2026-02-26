@@ -8,7 +8,7 @@ export interface Email {
   body: string;
   time: string;
   read: boolean;
-  label: EmailLabel;
+  label: string;
   draft?: string;
 }
 

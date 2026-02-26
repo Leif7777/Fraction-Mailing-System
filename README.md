@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Fraction Smart Inbox
 
-## Getting Started
+An AI-powered email inbox built for the Fraction sales team. Sorts, labels, drafts, and briefs — all in one place.
 
-First, run the development server:
+## Features
 
+- **AI Inbox Analysis** — Claude reads every email and assigns Urgent / Needs Reply / FYI / Ignore labels, sorted by priority
+- **Daily Brief** — A sharp, opinionated morning digest: priority calls, hidden connections, quick wins, and a closing line
+- **AI Draft Replies** — One-click personalized reply drafts written as Leif, Sales Associate at Fraction
+- **Editable Tags** — Click any label pill to change it or create a custom tag with a color picker
+- **Gmail-style Compose** — Full compose window with rich text (Tiptap), AI Assist, file attachments, Cc/Bcc, emoji picker, and send/undo
+
+## Setup
+
+### 1. Clone and install
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/Leif7777/Fraction-Mailing-System.git
+cd Fraction-Mailing-System
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Add your API key
+```bash
+cp .env.local.example .env.local
+```
+Open `.env.local` and replace `your_key_here` with your Anthropic API key (get one at console.anthropic.com).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+ANTHROPIC_API_KEY=sk-ant-...
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 3. Run locally
+```bash
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000).
 
-## Learn More
+## Deploy to Vercel
 
-To learn more about Next.js, take a look at the following resources:
+1. Push to GitHub
+2. Go to [vercel.com](https://vercel.com) → New Project → Import this repo
+3. Before deploying, add the environment variable:
+   - Key: `ANTHROPIC_API_KEY`
+   - Value: your `sk-ant-...` key
+4. Click Deploy
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Every push to `main` auto-deploys. Check the Deployments tab in Vercel for build status.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Tech stack
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [Next.js 16](https://nextjs.org) (App Router)
+- [Tailwind CSS](https://tailwindcss.com)
+- [Tiptap](https://tiptap.dev) (rich text editor)
+- [Anthropic Claude](https://anthropic.com) (`claude-sonnet-4-6` via `/api/claude`)
