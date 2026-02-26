@@ -210,4 +210,425 @@ Unsubscribe | This is a promotional email`,
     read: true,
     label: "Ignore",
   },
+  {
+    id: "11",
+    from: "Nina Hartwell",
+    fromEmail: "nina.hartwell@gmail.com",
+    subject: "Interested in buying a fraction — first-time buyer questions",
+    body: `Hi Leif,
+
+I came across Fraction through a friend who owns a stake in the Palm Springs property. I'm a surgeon based in Chicago and I'm seriously considering purchasing a 25% share in a vacation property.
+
+A few questions before I schedule a call:
+- What's the minimum investment?
+- How liquid is this? Can I sell my stake if I need to?
+- Do owners get guaranteed usage weeks, or is it first-come?
+- How is the co-ownership agreement structured legally?
+
+I'm pre-approved for up to $250K and would ideally want somewhere warm — Florida, Arizona, or Caribbean.
+
+Looking forward to hearing from you,
+Nina Hartwell`,
+    time: "9:02 AM",
+    read: false,
+    label: "Needs Reply",
+  },
+  {
+    id: "12",
+    from: "Carlos Mendez",
+    fromEmail: "c.mendez@keystonepm.com",
+    subject: "Property manager report: Tulum — Feb maintenance issues",
+    body: `Hi Leif,
+
+Monthly update on the Tulum beachfront property:
+
+COMPLETED:
+- AC unit in master bedroom replaced ($1,840, within approved budget)
+- Pool resurfacing complete — looks great
+- New cleaning crew onboarded, rating up to 4.9★
+
+PENDING:
+- Ocean-facing deck boards showing salt damage — estimate incoming (~$3,200)
+- Guest complained about WiFi speeds; upgrading router next week
+
+Occupancy: 22/28 days in February (78%). March is fully booked.
+
+Let me know if you have questions.
+Carlos Mendez
+Keystone Property Management`,
+    time: "8:15 AM",
+    read: false,
+    label: "FYI",
+  },
+  {
+    id: "13",
+    from: "Laura Chen",
+    fromEmail: "l.chen@fractionteam.com",
+    subject: "Legal: Updated co-ownership agreement template — review needed",
+    body: `Hi Leif,
+
+Our legal team has updated the standard co-ownership agreement template to reflect the new SEC guidance issued last month. Key changes:
+
+1. Clarified exit rights and forced sale provisions
+2. Updated dispute resolution clause (arbitration, not litigation)
+3. Added rental income waterfall schedule as an exhibit
+4. New definitions section for "material decision" threshold
+
+I need sign-off from Sales before we roll this out to new listings. Can you review by Thursday? I've attached the redline.
+
+Thanks,
+Laura Chen
+Head of Legal, Fraction`,
+    time: "Yesterday",
+    read: false,
+    label: "Urgent",
+  },
+  {
+    id: "14",
+    from: "Tom Bradley",
+    fromEmail: "t.bradley@fortunemag.com",
+    subject: "Fortune feature: Looking for a co-ownership success story",
+    body: `Hi Leif,
+
+I'm a staff writer at Fortune covering the rise of fractional real estate. I'm writing a feature on how co-ownership is democratizing access to luxury properties and I'd love to include a Fraction customer success story.
+
+Ideally I'm looking for an owner who:
+- Bought their first fraction in the last 12 months
+- Has used the property and earned rental income
+- Is willing to be quoted by name
+
+Would Fraction be willing to connect me with a suitable client? Happy to share questions in advance and give approval rights over any quotes.
+
+Deadline is March 10th.
+
+Best,
+Tom Bradley`,
+    time: "Yesterday",
+    read: false,
+    label: "Needs Reply",
+  },
+  {
+    id: "15",
+    from: "Wei Zhang",
+    fromEmail: "w.zhang@pacificventures.com",
+    subject: "Follow-up: Series B interest from Pacific Ventures",
+    body: `Hi Leif,
+
+Following up on our conversation at the Miami conference last month. Our fund is actively looking at PropTech opportunities and Fraction continues to stand out.
+
+We'd like to schedule a formal intro call with your CEO and CFO. We typically move quickly — if the fit is right we can have a term sheet within 30 days.
+
+Our check size for Series B is $8–15M. We've backed three other marketplace models that scaled to $100M+ ARR.
+
+Are you able to make an intro to the right person on your leadership team?
+
+Best,
+Wei Zhang
+Partner, Pacific Ventures`,
+    time: "Yesterday",
+    read: false,
+    label: "Urgent",
+  },
+  {
+    id: "16",
+    from: "Gregory Walsh",
+    fromEmail: "g.walsh@coowner.com",
+    subject: "Noise complaint — other co-owners at Hamptons property",
+    body: `Leif,
+
+I need to escalate an issue at the Hamptons property (18 Dune Crest Rd). The other co-owners had a large party last weekend that resulted in a noise complaint from neighbors and minor damage to the back patio furniture.
+
+I have photos and a copy of the neighbor's complaint letter. This is not the first time — there was a similar incident in September.
+
+What recourse do I have as a co-owner? Is there a conduct policy in the agreement? I want this documented formally.
+
+Gregory Walsh`,
+    time: "Feb 24",
+    read: false,
+    label: "Needs Reply",
+  },
+  {
+    id: "17",
+    from: "Fraction Website",
+    fromEmail: "noreply@fraction.com",
+    subject: "New lead: Aisha Patel — $200K budget, interested in Hawaii",
+    body: `New inquiry submitted via fraction.com
+
+Name: Aisha Patel
+Email: aisha.patel@techcorp.com
+Phone: (415) 882-0934
+Budget: $150,000–$200,000
+Location preference: Hawaii, Napa Valley
+Timeline: Ready to invest within 60 days
+Notes: "Looking for a property I can use for family vacations 2–3 times a year and earn rental income the rest of the time. Saw Fraction featured in TechCrunch."
+
+This lead was auto-assigned to you based on the Hawaii property pipeline.
+
+— Fraction CRM`,
+    time: "Feb 23",
+    read: false,
+    label: "Urgent",
+  },
+  {
+    id: "18",
+    from: "Marcus Hill",
+    fromEmail: "m.hill@pacaso.com",
+    subject: "Reaching out — potential collaboration between Pacaso and Fraction",
+    body: `Hi Leif,
+
+Marcus here from the partnerships team at Pacaso. I know we're technically competitors but I've been thinking about whether there's a geography or asset class where collaboration makes more sense than competition.
+
+Specifically, I'm curious whether Fraction would consider a white-label arrangement for our international markets where we don't have an operational footprint.
+
+No hard pitch — just exploratory. Worth a 30-minute call?
+
+Marcus Hill
+VP Partnerships, Pacaso`,
+    time: "Feb 23",
+    read: true,
+    label: "FYI",
+  },
+  {
+    id: "19",
+    from: "HR Team",
+    fromEmail: "hr@fractionteam.com",
+    subject: "Action required: Complete your Q1 performance self-review",
+    body: `Hi Leif,
+
+This is a reminder that Q1 performance self-reviews are due by March 7th. Please log in to Lattice and complete your self-assessment before the deadline.
+
+The review covers:
+- Goal progress (OKRs)
+- Core competencies
+- Manager feedback request
+- Development goals for Q2
+
+The process takes about 30–45 minutes. If you have questions, reach out to HR.
+
+— Fraction People Team`,
+    time: "Feb 22",
+    read: true,
+    label: "FYI",
+  },
+  {
+    id: "20",
+    from: "Samantha Briggs",
+    fromEmail: "s.briggs@alphawealth.com",
+    subject: "Client referral: 3 HNW investors ready to move fast",
+    body: `Hi Leif,
+
+We met briefly at the Wealth Management Symposium in NYC last week. I manage a book of about 140 HNW clients and three of them have specifically asked me about fractional real estate after reading about Fraction in Bloomberg.
+
+All three have $300K–$500K to allocate and want diversified property exposure without full ownership headaches. They're ready to move within the quarter.
+
+Do you have a referral fee structure? I want to make sure I'm doing this the right way before making introductions.
+
+Samantha Briggs
+Senior Wealth Advisor, Alpha Wealth Management`,
+    time: "Feb 21",
+    read: false,
+    label: "Needs Reply",
+  },
+  {
+    id: "21",
+    from: "David Park",
+    fromEmail: "d.park@gmail.com",
+    subject: "Interested in buying additional stake at Napa property",
+    body: `Hi Leif,
+
+I currently own 10% of the Napa Valley vineyard property and I love it. I've heard through the co-owner group chat that one of the other owners (I believe the 25% holder) is looking to sell their stake.
+
+I'd like to exercise any right of first refusal I might have and potentially increase my ownership to 35%. Can you confirm:
+1. Does my co-ownership agreement give me ROFR?
+2. What is the current platform valuation for a 25% stake?
+3. What's the process and timeline?
+
+Happy to move quickly on this.
+
+David Park`,
+    time: "Feb 21",
+    read: false,
+    label: "Needs Reply",
+  },
+  {
+    id: "22",
+    from: "Jennifer Lowe",
+    fromEmail: "j.lowe@wellsfargo.com",
+    subject: "Financing options for fractional real estate — bank partnership",
+    body: `Dear Leif,
+
+I'm reaching out from Wells Fargo's innovation lending group. We've been exploring financing products for fractional real estate buyers — a segment we currently have no product for.
+
+We'd love to understand how your buyers typically fund purchases and whether there's appetite for a co-branded lending product (e.g., "Fraction + Wells Fargo Fractional Mortgage").
+
+Would your team be open to a preliminary conversation? This would be at the product strategy level, not a sales call.
+
+Jennifer Lowe
+Director, Innovation Lending
+Wells Fargo`,
+    time: "Feb 20",
+    read: false,
+    label: "FYI",
+  },
+  {
+    id: "23",
+    from: "Oliver Grant",
+    fromEmail: "o.grant@taxadvisors.com",
+    subject: "Property tax assessment appeal — Malibu co-owners need to act",
+    body: `Dear Fraction team,
+
+I represent several co-owners at the Malibu property (123 Ocean View Drive). The county has issued a reassessment that would increase the annual property tax bill by 34% — from $18,200 to $24,400.
+
+We believe there are strong grounds for appeal based on comparable sales data. However, the appeal deadline is March 15th and we need written authorization from all co-owners to file jointly.
+
+Please advise on how to coordinate this with the full ownership group. Time is short.
+
+Oliver Grant, CPA
+Grant Tax Advisors`,
+    time: "Feb 20",
+    read: false,
+    label: "Urgent",
+  },
+  {
+    id: "24",
+    from: "Emergency Maintenance",
+    fromEmail: "alerts@keystonepm.com",
+    subject: "⚠️ WATER LEAK — Scottsdale property, guest checking in tomorrow",
+    body: `PRIORITY ALERT
+
+Property: 82 Desert Rose Ct, Scottsdale
+Issue: Burst pipe detected in guest bathroom (unit 2)
+Status: Water shut off to unit. Plumber dispatched, ETA 2 hours.
+Guest impact: Couple checking in tomorrow at 3pm for 5-night stay
+
+Estimated repair: $800–$1,200
+We need authorization to proceed and a decision on whether to relocate the guest or delay repair and adjust check-in.
+
+Please call Carlos at (305) 441-8823 immediately.
+
+— Keystone Emergency Line`,
+    time: "7:43 AM",
+    read: false,
+    label: "Urgent",
+  },
+  {
+    id: "25",
+    from: "Isabella Fontaine",
+    fromEmail: "i.fontaine@euroestates.com",
+    subject: "Partnership proposal: Co-ownership listings in French Riviera",
+    body: `Dear Leif,
+
+I am the director of Euro Estates, a luxury property agency specialising in the French Riviera and Tuscany. We have several owners of exceptional properties who are interested in the co-ownership model but lack a platform to facilitate it.
+
+Specifically, I have:
+- A 6-bedroom villa in Cap Ferrat (est. €3.2M) — owner open to selling 60% in fractions
+- A Tuscan farmhouse estate (€1.8M) — owner wants to retain 25%, sell the rest
+
+Would Fraction consider international listings, or a white-label arrangement for European properties?
+
+I look forward to your response.
+
+Isabella Fontaine
+Director, Euro Estates`,
+    time: "Feb 19",
+    read: false,
+    label: "Needs Reply",
+  },
+  {
+    id: "26",
+    from: "Tyler Brooks",
+    fromEmail: "t.brooks@outlook.com",
+    subject: "Following up — we spoke 3 weeks ago about Sedona property",
+    body: `Hi Leif,
+
+Just following up on our conversation in early February. You mentioned the Sedona listing was coming to market in late February.
+
+Has it launched yet? I have $180K ready to invest and Sedona is my top pick. I'd hate to miss the window.
+
+Let me know!
+Tyler`,
+    time: "Feb 19",
+    read: false,
+    label: "Needs Reply",
+  },
+  {
+    id: "27",
+    from: "Compliance Alert",
+    fromEmail: "compliance@fractionteam.com",
+    subject: "KYC incomplete: 2 new buyers blocked before funding",
+    body: `Hi Leif,
+
+Two buyers in your pipeline have incomplete KYC verification and are currently blocked from completing their purchases:
+
+1. Aisha Patel — missing government ID (back side)
+2. Kevin Morrow — address verification failed (3 attempts)
+
+Both purchases total $285,000 and have been pending for 6+ business days. Per policy, funds will be released back to buyers after 10 days if KYC is not resolved.
+
+Please reach out to both buyers to prompt action, or escalate to the compliance team if they're unresponsive.
+
+— Fraction Compliance`,
+    time: "Feb 18",
+    read: false,
+    label: "Urgent",
+  },
+  {
+    id: "28",
+    from: "Airbnb for Work",
+    fromEmail: "business@airbnb.com",
+    subject: "Your properties could earn more with Airbnb for Work",
+    body: `Hi there,
+
+Airbnb for Work connects your properties with corporate travelers — a high-value segment that books longer stays and treats properties with care.
+
+Properties on our business travel program earn 22% more on average and see higher review scores.
+
+Getting started takes 5 minutes. No extra fees.
+
+[Learn more]
+
+Unsubscribe | Airbnb Ireland UC, 8 Hanover Quay, Dublin`,
+    time: "Feb 18",
+    read: true,
+    label: "Ignore",
+  },
+  {
+    id: "29",
+    from: "Kevin Morrow",
+    fromEmail: "k.morrow@morrow-holdings.com",
+    subject: "Re: My KYC verification — this is frustrating",
+    body: `Leif,
+
+I've tried to verify my address three times now and keep getting rejected. My passport, utility bill, and bank statement are all in order. This is a $150,000 purchase and I'm being treated like a suspicious character.
+
+I spoke with your compliance team and they were unhelpful. I have a board meeting on Friday and I need this resolved before then or I'm walking.
+
+Can you personally intervene here? I need a human to look at my documents, not an algorithm.
+
+Kevin Morrow
+Morrow Holdings`,
+    time: "Feb 18",
+    read: false,
+    label: "Urgent",
+  },
+  {
+    id: "30",
+    from: "Real Estate Weekly",
+    fromEmail: "digest@reweeekly.io",
+    subject: "📊 Market digest: Luxury vacation home prices up 8% in Q4",
+    body: `REAL ESTATE WEEKLY — Market Digest
+
+KEY DATA THIS WEEK:
+• Luxury vacation home prices rose 8.2% in Q4 2025 vs Q4 2024
+• Palm Springs leads appreciation at +14% YoY
+• Miami Beach fractional inventory down 40% — supply crunch continues
+• Mortgage rates stable at 6.7% — refinance activity picking up
+
+FEATURED REPORT: "The Case for Co-Ownership in a High-Rate Environment" — download free at reweeekly.io
+
+Unsubscribe | Real Estate Weekly, 200 Park Ave, New York NY`,
+    time: "Feb 17",
+    read: true,
+    label: "FYI",
+  },
 ];

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import Image from "next/image";
 import { sampleEmails, Email } from "@/lib/emails";
 import { CustomTag, getLabelStyle, DEFAULT_LABEL_NAMES } from "@/lib/labelConfig";
@@ -22,17 +22,30 @@ const USERS = [
 ];
 
 export default function Home() {
-  // ── Core email state ──
-  const [emails, setEmails] = useState<Email[]>(sampleEmails);
+  // ── Core email state (hydrated from localStorage) ──
+  const [emails, setEmails] = useState<Email[]>(() => {
+    if (typeof window === "undefined") return sampleEmails;
+    try {
+      const saved = localStorage.getItem("fraction_emails");
+      return saved ? JSON.parse(saved) : sampleEmails;
+    } catch { return sampleEmails; }
+  });
   const [selected, setSelected] = useState<Email | null>(null);
   const [filter, setFilter] = useState("All");
+  const [search, setSearch] = useState("");
   const [analyzing, setAnalyzing] = useState(false);
   const [analyzed, setAnalyzed] = useState(false);
   const [drafting, setDrafting] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  // ── Custom tags ──
-  const [customTags, setCustomTags] = useState<CustomTag[]>([]);
+  // ── Custom tags (hydrated from localStorage) ──
+  const [customTags, setCustomTags] = useState<CustomTag[]>(() => {
+    if (typeof window === "undefined") return [];
+    try {
+      const saved = localStorage.getItem("fraction_custom_tags");
+      return saved ? JSON.parse(saved) : [];
+    } catch { return []; }
+  });
 
   // ── Daily brief ──
   const [showBrief, setShowBrief] = useState(false);
@@ -50,6 +63,10 @@ export default function Home() {
   // ── Profile menu ──
   const [currentUser, setCurrentUser] = useState(USERS[0]);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+
+  // ── Persist to localStorage ──
+  useEffect(() => { localStorage.setItem("fraction_emails", JSON.stringify(emails)); }, [emails]);
+  useEffect(() => { localStorage.setItem("fraction_custom_tags", JSON.stringify(customTags)); }, [customTags]);
 
   // ── Analyze ──
   const analyze = async () => {
@@ -155,7 +172,14 @@ export default function Home() {
   const counts: Record<string, number> = Object.fromEntries(
     allFilterNames.map((f) => [f, f === "All" ? emails.length : emails.filter((e) => e.label === f).length])
   );
-  const filteredEmails = emails.filter((e) => filter === "All" || e.label === filter);
+  const filteredEmails = emails.filter((e) => {
+    if (filter !== "All" && e.label !== filter) return false;
+    if (search.trim()) {
+      const q = search.toLowerCase();
+      return e.from.toLowerCase().includes(q) || e.subject.toLowerCase().includes(q) || e.body.toLowerCase().includes(q);
+    }
+    return true;
+  });
   const unread = emails.filter((e) => !e.read).length;
 
   // ── Label pill renderer ──
@@ -351,9 +375,33 @@ export default function Home() {
           </div>
         </div>
 
+        {/* Search */}
+        <div className="px-3 py-2.5 border-b" style={{ borderColor: "var(--fraction-border)" }}>
+          <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg" style={{ background: "var(--fraction-bg)" }}>
+            <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ color: "var(--fraction-muted)" }}>
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
+            </svg>
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search emails…"
+              className="flex-1 bg-transparent text-sm outline-none"
+              style={{ color: "var(--fraction-dark)" }}
+            />
+            {search && (
+              <button onClick={() => setSearch("")} className="flex-shrink-0" style={{ color: "var(--fraction-muted)" }}>
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            )}
+          </div>
+        </div>
+
         <div className="overflow-y-auto flex-1">
           {filteredEmails.length === 0 ? (
-            <div className="p-10 text-center text-sm" style={{ color: "var(--fraction-muted)" }}>No emails here</div>
+            <div className="p-10 text-center text-sm" style={{ color: "var(--fraction-muted)" }}>{search ? `No results for "${search}"` : "No emails here"}</div>
           ) : (
             filteredEmails.map((email) => (
               <button
