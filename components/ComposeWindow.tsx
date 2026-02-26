@@ -81,6 +81,7 @@ export default function ComposeWindow({ onClose, onSend, initialData }: Props) {
       Link.configure({ openOnClick: false }),
       Placeholder.configure({ placeholder: "Write your message, or click ✨ AI Assist to generate a draft…" }),
     ],
+    immediatelyRender: false,
     content: initialData?.html ?? "",
     editorProps: {
       attributes: { class: "compose-editor" },
