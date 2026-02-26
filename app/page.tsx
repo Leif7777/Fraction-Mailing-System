@@ -383,7 +383,24 @@ export default function Home() {
                       </pre>
                     </div>
                     <div className="px-5 py-3 flex gap-2 border-t" style={{ background: "#fafcfa", borderColor: "var(--fraction-border)" }}>
-                      <button onClick={copyDraft} className="text-xs px-4 py-1.5 rounded-lg font-semibold transition-all text-white" style={{ background: "var(--fraction-green)" }}>
+                      <button
+                        onClick={() => {
+                          setComposeInitial({
+                            to: [selected.fromEmail],
+                            subject: `Re: ${selected.subject}`,
+                            html: `<p>${(selected.draft ?? "").replace(/\n\n/g, "</p><p>").replace(/\n/g, "<br>")}</p>`,
+                          });
+                          setComposeOpen(true);
+                        }}
+                        className="flex items-center gap-1.5 text-xs px-4 py-1.5 rounded-lg font-semibold transition-all text-white"
+                        style={{ background: "var(--fraction-green)" }}
+                      >
+                        <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                        </svg>
+                        Send
+                      </button>
+                      <button onClick={copyDraft} className="text-xs px-4 py-1.5 rounded-lg border font-semibold transition-all" style={{ borderColor: "var(--fraction-border)", color: "var(--fraction-text)" }}>
                         {copied ? "Copied!" : "Copy draft"}
                       </button>
                       <button onClick={generateDraft} disabled={drafting} className="text-xs px-4 py-1.5 rounded-lg border font-semibold transition-colors disabled:opacity-50" style={{ borderColor: "var(--fraction-border)", color: "var(--fraction-muted)" }}>
