@@ -29,16 +29,20 @@ export async function POST(req: NextRequest) {
     }
 
     const data = payload.data ?? payload;
-    const emailId: string = data.email_id ?? "";
+    console.log("Inbound payload:", JSON.stringify(payload, null, 2));
+
+    const emailId: string = data.email_id ?? data.id ?? "";
     const rawFrom: string = data.from ?? "";
     const subject: string = data.subject ?? "(no subject)";
 
     const { name, email } = parseFrom(rawFrom);
 
-    // Fetch full email body from Resend API
-    let body = "";
-    if (emailId) {
-      const { data: full } = await resend.emails.get(emailId);
+    // Try body from webhook payload first, then fall back to Resend API
+    let body = data.text ?? (data.html ? stripHtml(data.html) : "");
+
+    if (!body && emailId) {
+      const { data: full, error } = await resend.emails.get(emailId);
+      console.log("Resend API fetch:", JSON.stringify({ full, error }, null, 2));
       if (full) {
         body = full.text ?? (full.html ? stripHtml(full.html) : "");
       }
