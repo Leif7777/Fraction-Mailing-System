@@ -348,7 +348,7 @@ export default function Home() {
                   </button>
                 ))}
                 <div className="border-t" style={{ borderColor: "var(--fraction-border)" }}>
-                  <button onClick={() => { setShowProfileMenu(false); setToast({ message: "Logged out successfully", type: "success" }); }} className="w-full text-left px-3 py-2.5 flex items-center gap-2.5 hover:bg-gray-50 transition-colors">
+                  <button onClick={() => { setShowProfileMenu(false); setToast({ message: "Logged out successfully" }); }} className="w-full text-left px-3 py-2.5 flex items-center gap-2.5 hover:bg-gray-50 transition-colors">
                     <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ color: "var(--fraction-muted)" }}>
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                     </svg>
