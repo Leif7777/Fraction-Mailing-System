@@ -212,28 +212,18 @@ export default function DailyBriefPanel({ show, emails, onClose }: Props) {
         {/* Panel body */}
         <div className="flex-1 overflow-y-auto">
           {loading && (
-            <div className="px-6 py-6 flex flex-col gap-3">
-              <div className="flex items-center gap-2 mb-1">
-                <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: "var(--fraction-green)" }} />
-                <span className="text-xs font-semibold" style={{ color: "var(--fraction-green-dark)" }}>Writing your brief…</span>
-              </div>
+            <div className="flex flex-col items-center justify-center h-full gap-4 px-8 text-center">
               <div
-                className="rounded-xl p-4 font-mono text-xs leading-relaxed overflow-y-auto"
-                style={{
-                  background: "var(--fraction-dark)",
-                  color: "#a8d5a8",
-                  minHeight: 200,
-                  maxHeight: "calc(100vh - 200px)",
-                  whiteSpace: "pre-wrap",
-                  wordBreak: "break-word",
-                }}
+                className="w-12 h-12 rounded-2xl flex items-center justify-center"
+                style={{ background: "var(--fraction-green-light)" }}
               >
-                {streamText}
-                <span
-                  className="inline-block w-1.5 h-3.5 ml-0.5 align-middle animate-pulse"
-                  style={{ background: "var(--fraction-green)", borderRadius: 1 }}
-                />
+                <svg className="animate-spin w-5 h-5" style={{ color: "var(--fraction-green)" }} fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                </svg>
               </div>
+              <p className="text-sm font-medium" style={{ color: "var(--fraction-dark)" }}>Reading your inbox…</p>
+              <p className="text-xs" style={{ color: "var(--fraction-muted)" }}>Putting together your brief</p>
             </div>
           )}
 
