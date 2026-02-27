@@ -92,23 +92,38 @@ Include 2-3 priority calls, 2-3 interesting notes, 1-2 watch list items, 2-3 qui
 export default function DailyBriefPanel({ show, emails, onClose }: Props) {
   const [brief, setBrief] = useState<BriefData | null>(null);
   const [loading, setLoading] = useState(false);
+  const [streamText, setStreamText] = useState("");
   const [error, setError] = useState<string | null>(null);
   const hasPrefetched = useRef(false);
 
   const generate = useCallback(async () => {
     setLoading(true);
     setError(null);
+    setBrief(null);
+    setStreamText("");
     const variation = VARIATIONS[Math.floor(Math.random() * VARIATIONS.length)];
     try {
-      const res = await fetch("/api/claude", {
+      const res = await fetch("/api/brief", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt: buildPrompt(emails, variation) }),
       });
-      const { text, error: apiError } = await res.json();
-      if (apiError) throw new Error(apiError);
-      const cleaned = text.replace(/```json\n?|\n?```/g, "").trim();
+      if (!res.ok || !res.body) throw new Error("Stream failed");
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let fullText = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        fullText += decoder.decode(value, { stream: true });
+        setStreamText(fullText);
+      }
+
+      const cleaned = fullText.replace(/```json\n?|\n?```/g, "").trim();
       setBrief(JSON.parse(cleaned));
+      setStreamText("");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Something went wrong.");
     } finally {
@@ -197,18 +212,28 @@ export default function DailyBriefPanel({ show, emails, onClose }: Props) {
         {/* Panel body */}
         <div className="flex-1 overflow-y-auto">
           {loading && (
-            <div className="flex flex-col items-center justify-center h-full gap-4 px-8 text-center">
-              <div
-                className="w-12 h-12 rounded-2xl flex items-center justify-center"
-                style={{ background: "var(--fraction-green-light)" }}
-              >
-                <svg className="animate-spin w-5 h-5" style={{ color: "var(--fraction-green)" }} fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                </svg>
+            <div className="px-6 py-6 flex flex-col gap-3">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: "var(--fraction-green)" }} />
+                <span className="text-xs font-semibold" style={{ color: "var(--fraction-green-dark)" }}>Writing your brief…</span>
               </div>
-              <p className="text-sm font-medium" style={{ color: "var(--fraction-dark)" }}>Reading your inbox…</p>
-              <p className="text-xs" style={{ color: "var(--fraction-muted)" }}>Putting together your brief</p>
+              <div
+                className="rounded-xl p-4 font-mono text-xs leading-relaxed overflow-y-auto"
+                style={{
+                  background: "var(--fraction-dark)",
+                  color: "#a8d5a8",
+                  minHeight: 200,
+                  maxHeight: "calc(100vh - 200px)",
+                  whiteSpace: "pre-wrap",
+                  wordBreak: "break-word",
+                }}
+              >
+                {streamText}
+                <span
+                  className="inline-block w-1.5 h-3.5 ml-0.5 align-middle animate-pulse"
+                  style={{ background: "var(--fraction-green)", borderRadius: 1 }}
+                />
+              </div>
             </div>
           )}
 
@@ -229,7 +254,7 @@ export default function DailyBriefPanel({ show, emails, onClose }: Props) {
           {brief && !loading && (
             <div className="px-6 py-6 space-y-6">
               {/* Greeting */}
-              <div>
+              <div style={{ animation: "fadeIn 0.4s ease both" }}>
                 <h2 className="font-display text-2xl mb-0.5" style={{ color: "var(--fraction-dark)", fontWeight: 500 }}>
                   Good morning, Leif.
                 </h2>
@@ -242,10 +267,10 @@ export default function DailyBriefPanel({ show, emails, onClose }: Props) {
                 </p>
               </div>
 
-              <div style={{ borderTop: "1px solid var(--fraction-border)" }} />
+              <div style={{ borderTop: "1px solid var(--fraction-border)", animation: "fadeIn 0.4s ease 0.1s both" }} />
 
               {/* Priority Calls */}
-              <section>
+              <section style={{ animation: "fadeIn 0.4s ease 0.15s both" }}>
                 <h3 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--fraction-muted)" }}>
                   🔥 Priority Calls
                 </h3>
@@ -274,10 +299,10 @@ export default function DailyBriefPanel({ show, emails, onClose }: Props) {
                 </div>
               </section>
 
-              <div style={{ borderTop: "1px solid var(--fraction-border)" }} />
+              <div style={{ borderTop: "1px solid var(--fraction-border)", animation: "fadeIn 0.4s ease 0.3s both" }} />
 
               {/* Interesting Notes */}
-              <section>
+              <section style={{ animation: "fadeIn 0.4s ease 0.35s both" }}>
                 <h3 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--fraction-muted)" }}>
                   💡 Interesting Notes
                 </h3>
@@ -291,10 +316,10 @@ export default function DailyBriefPanel({ show, emails, onClose }: Props) {
                 </ul>
               </section>
 
-              <div style={{ borderTop: "1px solid var(--fraction-border)" }} />
+              <div style={{ borderTop: "1px solid var(--fraction-border)", animation: "fadeIn 0.4s ease 0.5s both" }} />
 
               {/* Watch List */}
-              <section>
+              <section style={{ animation: "fadeIn 0.4s ease 0.55s both" }}>
                 <h3 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--fraction-muted)" }}>
                   ⚠️ Watch List
                 </h3>
@@ -308,10 +333,10 @@ export default function DailyBriefPanel({ show, emails, onClose }: Props) {
                 </ul>
               </section>
 
-              <div style={{ borderTop: "1px solid var(--fraction-border)" }} />
+              <div style={{ borderTop: "1px solid var(--fraction-border)", animation: "fadeIn 0.4s ease 0.7s both" }} />
 
               {/* Quick Wins */}
-              <section>
+              <section style={{ animation: "fadeIn 0.4s ease 0.75s both" }}>
                 <h3 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--fraction-muted)" }}>
                   ✉️ Quick Wins
                 </h3>
@@ -325,12 +350,12 @@ export default function DailyBriefPanel({ show, emails, onClose }: Props) {
                 </ul>
               </section>
 
-              <div style={{ borderTop: "1px solid var(--fraction-border)" }} />
+              <div style={{ borderTop: "1px solid var(--fraction-border)", animation: "fadeIn 0.4s ease 0.9s both" }} />
 
               {/* Closing line */}
               <p
                 className="text-sm italic text-center pb-2"
-                style={{ color: "var(--fraction-muted)" }}
+                style={{ color: "var(--fraction-muted)", animation: "fadeIn 0.4s ease 0.95s both" }}
               >
                 {brief.closingLine}
               </p>
