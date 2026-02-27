@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Redis } from "@upstash/redis";
+import { Resend } from "resend";
 
 const kv = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL!,
   token: process.env.UPSTASH_REDIS_REST_TOKEN!,
 });
+
+const resend = new Resend(process.env.RESEND_API_KEY!);
 
 function parseFrom(raw: string): { name: string; email: string } {
   const match = raw.match(/^(.+?)\s*<(.+?)>$/);
@@ -25,28 +28,35 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: true });
     }
 
-    // Resend inbound payload shape
     const data = payload.data ?? payload;
+    const emailId: string = data.email_id ?? "";
     const rawFrom: string = data.from ?? "";
     const subject: string = data.subject ?? "(no subject)";
-    const html: string = data.html ?? "";
-    const text: string = data.text ?? stripHtml(html);
 
     const { name, email } = parseFrom(rawFrom);
+
+    // Fetch full email body from Resend API
+    let body = "";
+    if (emailId) {
+      const { data: full } = await resend.emails.get(emailId);
+      if (full) {
+        body = full.text ?? (full.html ? stripHtml(full.html) : "");
+      }
+    }
 
     const newEmail = {
       id: `inbound_${Date.now()}`,
       from: name || email,
       fromEmail: email,
       subject,
-      body: text.slice(0, 2000),
+      body: body.slice(0, 2000),
       time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
       read: false,
       label: "Needs Reply",
     };
 
     await kv.lpush("fraction_inbound_emails", JSON.stringify(newEmail));
-    await kv.ltrim("fraction_inbound_emails", 0, 199); // keep last 200
+    await kv.ltrim("fraction_inbound_emails", 0, 199);
 
     return NextResponse.json({ ok: true });
   } catch (err) {
