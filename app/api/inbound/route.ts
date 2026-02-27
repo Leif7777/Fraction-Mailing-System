@@ -47,13 +47,15 @@ export async function POST(req: NextRequest) {
       body = full.text || (full.html ? stripHtml(full.html) : "");
     }
 
+    const now = new Date();
     const newEmail = {
       id: `inbound_${Date.now()}`,
       from: name || email,
       fromEmail: email,
       subject,
       body: body.slice(0, 2000),
-      time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      time: now.toISOString(),
+      timestamp: now.toISOString(),
       read: false,
       label: "Needs Reply",
     };

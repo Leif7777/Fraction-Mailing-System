@@ -7,6 +7,7 @@ export interface Email {
   subject: string;
   body: string;
   time: string;
+  timestamp?: string;
   read: boolean;
   label: string;
   draft?: string;

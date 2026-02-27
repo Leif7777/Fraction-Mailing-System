@@ -191,6 +191,19 @@ export default function Home() {
     });
   };
 
+  // ── Delete ──
+  const deleteEmail = async (emailId: string) => {
+    setEmails((prev) => prev.filter((e) => e.id !== emailId));
+    if (selected?.id === emailId) setSelected(null);
+    if (emailId.startsWith("inbound_")) {
+      await fetch("/api/emails", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: emailId }),
+      });
+    }
+  };
+
   // ── Counts ──
   const allFilterNames = ["All", ...DEFAULT_LABEL_NAMES, ...customTags.map((t) => t.name)];
   const counts: Record<string, number> = Object.fromEntries(
@@ -205,6 +218,21 @@ export default function Home() {
     return true;
   });
   const unread = emails.filter((e) => !e.read).length;
+
+  // ── Time formatter (client-side, respects local timezone) ──
+  const formatEmailTime = (email: Email): string => {
+    const src = email.timestamp ?? email.time;
+    const d = new Date(src);
+    if (isNaN(d.getTime())) return email.time;
+    const now = new Date();
+    const isToday = d.toDateString() === now.toDateString();
+    const yesterday = new Date(now);
+    yesterday.setDate(yesterday.getDate() - 1);
+    const isYesterday = d.toDateString() === yesterday.toDateString();
+    if (isToday) return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    if (isYesterday) return "Yesterday";
+    return d.toLocaleDateString([], { month: "short", day: "numeric" });
+  };
 
   // ── Label pill renderer ──
   const LabelPill = ({ email, size = "sm" }: { email: Email; size?: "sm" | "md" }) => {
@@ -477,7 +505,7 @@ export default function Home() {
                       {email.from}
                     </span>
                   </div>
-                  <span className="text-xs flex-shrink-0" style={{ color: "var(--fraction-muted)" }}>{email.time}</span>
+                  <span className="text-xs flex-shrink-0" style={{ color: "var(--fraction-muted)" }}>{formatEmailTime(email)}</span>
                 </div>
                 <p className="text-xs truncate mb-1.5" style={{ fontWeight: email.read ? 400 : 600, color: email.read ? "var(--fraction-muted)" : "var(--fraction-text)" }}>
                   {email.subject}
@@ -521,11 +549,23 @@ export default function Home() {
                     </div>
                     <div className="min-w-0">
                       <p className="text-sm font-semibold truncate" style={{ color: "var(--fraction-dark)" }}>{selected.from}</p>
-                      <p className="text-xs truncate" style={{ color: "var(--fraction-muted)" }}>{selected.fromEmail} · {selected.time}</p>
+                      <p className="text-xs truncate" style={{ color: "var(--fraction-muted)" }}>{selected.fromEmail} · {formatEmailTime(selected)}</p>
                     </div>
                   </div>
                 </div>
-                <LabelPill email={selected} size="md" />
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <LabelPill email={selected} size="md" />
+                  <button
+                    onClick={() => deleteEmail(selected.id)}
+                    title="Delete email"
+                    className="w-8 h-8 flex items-center justify-center rounded-lg border transition-colors hover:bg-red-50 hover:border-red-200"
+                    style={{ borderColor: "var(--fraction-border)", color: "var(--fraction-muted)" }}
+                  >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
 
