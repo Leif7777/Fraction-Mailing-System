@@ -68,6 +68,27 @@ export default function Home() {
   useEffect(() => { localStorage.setItem("fraction_emails", JSON.stringify(emails)); }, [emails]);
   useEffect(() => { localStorage.setItem("fraction_custom_tags", JSON.stringify(customTags)); }, [customTags]);
 
+  // ── Poll for inbound emails every 30s ──
+  useEffect(() => {
+    const poll = async () => {
+      try {
+        const res = await fetch("/api/emails");
+        const { emails: inbound } = await res.json();
+        if (!inbound?.length) return;
+        setEmails((prev) => {
+          const existingIds = new Set(prev.map((e) => e.id));
+          const fresh = inbound.filter((e: Email) => !existingIds.has(e.id));
+          if (!fresh.length) return prev;
+          setToast({ message: `${fresh.length} new email${fresh.length > 1 ? "s" : ""} received` });
+          return [...fresh, ...prev];
+        });
+      } catch { /* silently ignore */ }
+    };
+    poll();
+    const interval = setInterval(poll, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
   // ── Analyze ──
   const analyze = async () => {
     setAnalyzing(true);
