@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
     const { name, email } = parseFrom(rawFrom);
 
     // Try body from webhook payload first, then fall back to Resend API
-    let body = data.text ?? (data.html ? stripHtml(data.html) : "");
+    let body = data.text || (data.html ? stripHtml(data.html) : "");
 
     if (!body && emailId) {
       const { data: full, error } = await resend.emails.get(emailId);
