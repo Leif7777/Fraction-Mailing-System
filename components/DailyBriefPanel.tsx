@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { Email } from "@/lib/emails";
 
 interface PriorityCall {
@@ -39,9 +39,17 @@ function buildPrompt(emails: Email[], variation: string): string {
     weekday: "long", month: "long", day: "numeric", year: "numeric",
   });
 
-  const emailList = emails
-    .map((e) => `[${e.label}] From: ${e.from} <${e.fromEmail}>\nSubject: ${e.subject}\n${e.body.slice(0, 400)}`)
-    .join("\n\n---\n\n");
+  // Only send high-priority emails to keep the prompt small and fast
+  const priorityEmails = emails
+    .filter((e) => e.label === "Urgent" || e.label === "Needs Reply")
+    .slice(0, 15);
+  const fyi = emails.filter((e) => e.label === "FYI").length;
+  const ignore = emails.filter((e) => e.label === "Ignore").length;
+
+  const emailList = priorityEmails
+    .map((e) => `[${e.label}] From: ${e.from}\nSubject: ${e.subject}\n${e.body.slice(0, 200)}`)
+    .join("\n\n---\n\n")
+    + (fyi + ignore > 0 ? `\n\n(Plus ${fyi} FYI and ${ignore} Ignore emails not shown here.)` : "");
 
   return `You are Leif's sharp, opinionated chief of staff at Fraction (fraction.com) — a fractional real estate co-ownership platform where homeowners sell partial stakes and buyers co-own premium properties. Today is ${today}.
 
@@ -85,6 +93,7 @@ export default function DailyBriefPanel({ show, emails, onClose }: Props) {
   const [brief, setBrief] = useState<BriefData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const hasPrefetched = useRef(false);
 
   const generate = useCallback(async () => {
     setLoading(true);
@@ -107,15 +116,13 @@ export default function DailyBriefPanel({ show, emails, onClose }: Props) {
     }
   }, [emails]);
 
-  // Auto-generate when panel first opens
-  const handleOpen = useCallback(() => {
-    if (!brief && !loading) generate();
-  }, [brief, loading, generate]);
-
-  // Trigger generation when shown
-  if (show && !brief && !loading && !error) {
-    handleOpen();
-  }
+  // Pre-warm: generate as soon as emails are available, before panel opens
+  useEffect(() => {
+    if (emails.length > 0 && !hasPrefetched.current) {
+      hasPrefetched.current = true;
+      generate();
+    }
+  }, [emails.length]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const today = new Date().toLocaleDateString("en-US", {
     weekday: "long", month: "long", day: "numeric", year: "numeric",
