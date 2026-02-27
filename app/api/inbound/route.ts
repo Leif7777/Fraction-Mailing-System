@@ -20,6 +20,11 @@ export async function POST(req: NextRequest) {
   try {
     const payload = await req.json();
 
+    // Ignore all non-inbound events (sent, delivered, bounced, opened, clicked, etc.)
+    if (payload.type && payload.type !== "email.received") {
+      return NextResponse.json({ ok: true });
+    }
+
     // Resend inbound payload shape
     const data = payload.data ?? payload;
     const rawFrom: string = data.from ?? "";
