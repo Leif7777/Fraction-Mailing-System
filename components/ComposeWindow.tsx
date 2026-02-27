@@ -69,6 +69,8 @@ export default function ComposeWindow({ onClose, onSend, initialData }: Props) {
   const [isDragging, setIsDragging] = useState(false);
   const [showDiscard, setShowDiscard] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const [sendError, setSendError] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const editor = useEditor({
@@ -130,11 +132,25 @@ export default function ComposeWindow({ onClose, onSend, initialData }: Props) {
     onClose();
   };
 
-  const handleSend = () => {
-    onSend({
-      to, cc, bcc, subject,
-      html: editor?.getHTML() ?? "",
-    });
+  const handleSend = async () => {
+    if (!to.length) { setSendError("Please add at least one recipient."); return; }
+    setIsSending(true);
+    setSendError("");
+    try {
+      const res = await fetch("/api/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ to, cc, bcc, subject, html: editor?.getHTML() ?? "" }),
+      });
+      const json = await res.json();
+      if (!res.ok) { setSendError(json.error ?? "Failed to send."); return; }
+      onSend({ to, cc, bcc, subject, html: editor?.getHTML() ?? "" });
+      onClose();
+    } catch {
+      setSendError("Network error — please try again.");
+    } finally {
+      setIsSending(false);
+    }
   };
 
   const handleAIAssist = async () => {
@@ -429,16 +445,27 @@ Write a complete, polished, professional email body. Match the context: if it's 
           {/* Bottom toolbar */}
           <div className="flex items-center gap-1 px-3 py-2 border-t" style={{ borderColor: "var(--fraction-border)", background: "#fafcfa" }}>
             {/* Send */}
-            <button
-              onClick={handleSend}
-              className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-sm font-semibold text-white transition-colors"
-              style={{ background: "var(--fraction-green)" }}
-            >
-              Send
-              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-              </svg>
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleSend}
+                disabled={isSending}
+                className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-sm font-semibold text-white transition-colors disabled:opacity-60"
+                style={{ background: "var(--fraction-green)" }}
+              >
+                {isSending ? (
+                  <svg className="animate-spin w-3.5 h-3.5" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                  </svg>
+                ) : (
+                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                  </svg>
+                )}
+                {isSending ? "Sending…" : "Send"}
+              </button>
+              {sendError && <span className="text-xs text-red-500">{sendError}</span>}
+            </div>
 
             {/* AI Assist */}
             <button

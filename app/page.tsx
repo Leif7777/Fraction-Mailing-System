@@ -181,7 +181,6 @@ export default function Home() {
 
   // ── Compose / Send ──
   const handleSend = (data: ComposeData) => {
-    setComposeOpen(false);
     setComposeInitial(undefined);
     setToast({
       message: "Message sent",
