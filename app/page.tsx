@@ -64,6 +64,9 @@ export default function Home() {
   const [currentUser, setCurrentUser] = useState(USERS[0]);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
 
+  // ── Mobile navigation ──
+  const [mobileView, setMobileView] = useState<"list" | "detail">("list");
+
   // ── Persist to localStorage ──
   useEffect(() => { localStorage.setItem("fraction_emails", JSON.stringify(emails)); }, [emails]);
   useEffect(() => { localStorage.setItem("fraction_custom_tags", JSON.stringify(customTags)); }, [customTags]);
@@ -157,6 +160,7 @@ export default function Home() {
   const selectEmail = (email: Email) => {
     setEmails((prev) => prev.map((e) => (e.id === email.id ? { ...e, read: true } : e)));
     setSelected({ ...email, read: true });
+    setMobileView("detail");
   };
 
   // ── Tag actions ──
@@ -230,8 +234,8 @@ export default function Home() {
   return (
     <div className="flex h-screen overflow-hidden" style={{ background: "var(--fraction-bg)" }}>
 
-      {/* ── Sidebar ── */}
-      <aside className="w-64 flex flex-col border-r" style={{ background: "#fff", borderColor: "var(--fraction-border)" }}>
+      {/* ── Sidebar (desktop only) ── */}
+      <aside className="hidden md:flex w-64 flex-col border-r" style={{ background: "#fff", borderColor: "var(--fraction-border)" }}>
         {/* Logo */}
         <div className="px-5 pt-6 pb-5 border-b" style={{ borderColor: "var(--fraction-border)" }}>
           <Image
@@ -370,8 +374,21 @@ export default function Home() {
       </aside>
 
       {/* ── Email list ── */}
-      <section className="w-80 flex flex-col border-r overflow-hidden" style={{ background: "#fff", borderColor: "var(--fraction-border)" }}>
-        <div className="px-4 py-3.5 border-b flex items-center justify-between" style={{ borderColor: "var(--fraction-border)" }}>
+      <section className={`${mobileView === "detail" ? "hidden md:flex" : "flex"} flex-col border-r overflow-hidden md:w-80 w-full`} style={{ background: "#fff", borderColor: "var(--fraction-border)" }}>
+
+        {/* Mobile top bar */}
+        <div className="md:hidden flex items-center justify-between px-4 py-3 border-b" style={{ borderColor: "var(--fraction-border)" }}>
+          <Image src="https://cdn.prod.website-files.com/625dbcce19e14f11c2b08a8c/625e707681cc87d05b0a03dc_primary%202.png" alt="Fraction" width={90} height={26} className="object-contain" unoptimized />
+          <div className="flex items-center gap-2">
+            <button onClick={() => setShowBrief(true)} className="w-8 h-8 flex items-center justify-center rounded-lg text-base" style={{ background: "var(--fraction-green-light)" }}>☀️</button>
+            <button onClick={() => { setComposeInitial(undefined); setComposeOpen(true); }} className="w-8 h-8 flex items-center justify-center rounded-lg text-white" style={{ background: "var(--fraction-green)" }}>
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" /></svg>
+            </button>
+          </div>
+        </div>
+
+        {/* Desktop header */}
+        <div className="hidden md:flex px-4 py-3.5 border-b items-center justify-between" style={{ borderColor: "var(--fraction-border)" }}>
           <h2 className="text-sm font-semibold" style={{ color: "var(--fraction-dark)" }}>
             {filter === "All" ? "Inbox" : filter}
           </h2>
@@ -381,12 +398,10 @@ export default function Home() {
                 {unread} new
               </span>
             )}
-            {/* Compose button */}
             <button
               onClick={() => { setComposeInitial(undefined); setComposeOpen(true); }}
               className="flex items-center gap-1 text-xs px-2.5 py-1 rounded-lg font-semibold text-white transition-colors"
               style={{ background: "var(--fraction-green)" }}
-              title="Compose"
             >
               <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
@@ -460,22 +475,33 @@ export default function Home() {
       </section>
 
       {/* ── Reading pane ── */}
-      <main className="flex-1 flex flex-col overflow-hidden">
+      <main className={`${mobileView === "list" ? "hidden md:flex" : "flex"} flex-1 flex-col overflow-hidden`}>
         {selected ? (
           <>
-            <div className="bg-white border-b px-8 py-6" style={{ borderColor: "var(--fraction-border)" }}>
-              <div className="flex items-start justify-between gap-6">
-                <div className="flex-1">
-                  <h1 className="font-display text-2xl mb-3 leading-snug" style={{ color: "var(--fraction-dark)", fontWeight: 500 }}>
+            <div className="bg-white border-b px-4 md:px-8 py-4 md:py-6" style={{ borderColor: "var(--fraction-border)" }}>
+              {/* Mobile back button */}
+              <button
+                onClick={() => setMobileView("list")}
+                className="md:hidden flex items-center gap-1.5 text-sm mb-3 font-medium"
+                style={{ color: "var(--fraction-green-dark)" }}
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
+                </svg>
+                Inbox
+              </button>
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex-1 min-w-0">
+                  <h1 className="font-display text-xl md:text-2xl mb-3 leading-snug" style={{ color: "var(--fraction-dark)", fontWeight: 500 }}>
                     {selected.subject}
                   </h1>
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0" style={{ background: "var(--fraction-green-light)", color: "var(--fraction-green-dark)" }}>
+                    <div className="w-8 h-8 md:w-9 md:h-9 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0" style={{ background: "var(--fraction-green-light)", color: "var(--fraction-green-dark)" }}>
                       {selected.from[0].toUpperCase()}
                     </div>
-                    <div>
-                      <p className="text-sm font-semibold" style={{ color: "var(--fraction-dark)" }}>{selected.from}</p>
-                      <p className="text-xs" style={{ color: "var(--fraction-muted)" }}>{selected.fromEmail} · {selected.time}</p>
+                    <div className="min-w-0">
+                      <p className="text-sm font-semibold truncate" style={{ color: "var(--fraction-dark)" }}>{selected.from}</p>
+                      <p className="text-xs truncate" style={{ color: "var(--fraction-muted)" }}>{selected.fromEmail} · {selected.time}</p>
                     </div>
                   </div>
                 </div>
@@ -483,8 +509,8 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto px-8 py-7" style={{ background: "var(--fraction-bg)" }}>
-              <div className="max-w-2xl">
+            <div className="flex-1 overflow-y-auto px-4 md:px-8 py-5 md:py-7" style={{ background: "var(--fraction-bg)" }}>
+              <div className="max-w-2xl w-full">
                 <pre className="whitespace-pre-wrap text-sm leading-relaxed" style={{ fontFamily: "'Nunito Sans', 'Avenir Next', sans-serif", color: "var(--fraction-text)" }}>
                   {selected.body}
                 </pre>
