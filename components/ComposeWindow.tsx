@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
@@ -171,10 +171,18 @@ Write a complete, polished, professional email body. Match the context: if it's 
     setLinkUrl("");
   };
 
+  // Go full-screen on mobile
+  useEffect(() => {
+    if (window.innerWidth < 768) setMode("fullscreen");
+  }, []);
+
   // Window geometry
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
   const normalStyle = { width: 560, height: 480, bottom: 0, right: 24 };
   const minimizedStyle = { width: 320, height: "auto", bottom: 0, right: 24 };
-  const fullscreenStyle = { inset: "5vh 8vw", width: "auto", height: "auto", borderRadius: 16 };
+  const fullscreenStyle = isMobile
+    ? { inset: 0, width: "auto", height: "auto", borderRadius: 0 }
+    : { inset: "5vh 8vw", width: "auto", height: "auto", borderRadius: 16 };
 
   const containerStyle = mode === "fullscreen"
     ? { ...fullscreenStyle, position: "fixed" as const }

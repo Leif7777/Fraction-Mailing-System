@@ -380,11 +380,32 @@ export default function Home() {
         <div className="md:hidden flex items-center justify-between px-4 py-3 border-b" style={{ borderColor: "var(--fraction-border)" }}>
           <Image src="https://cdn.prod.website-files.com/625dbcce19e14f11c2b08a8c/625e707681cc87d05b0a03dc_primary%202.png" alt="Fraction" width={90} height={26} className="object-contain" unoptimized />
           <div className="flex items-center gap-2">
+            <button onClick={analyze} disabled={analyzing} className="w-8 h-8 flex items-center justify-center rounded-lg border" style={{ borderColor: "var(--fraction-border)", background: "#fff" }}>
+              {analyzing ? <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg> : <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ color: "var(--fraction-text)" }}><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>}
+            </button>
             <button onClick={() => setShowBrief(true)} className="w-8 h-8 flex items-center justify-center rounded-lg text-base" style={{ background: "var(--fraction-green-light)" }}>☀️</button>
             <button onClick={() => { setComposeInitial(undefined); setComposeOpen(true); }} className="w-8 h-8 flex items-center justify-center rounded-lg text-white" style={{ background: "var(--fraction-green)" }}>
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" /></svg>
             </button>
           </div>
+        </div>
+
+        {/* Mobile filter pills */}
+        <div className="md:hidden flex gap-2 px-3 py-2.5 border-b overflow-x-auto scrollbar-none" style={{ borderColor: "var(--fraction-border)" }}>
+          {allFilterNames.map((f) => (
+            <button
+              key={f}
+              onClick={() => setFilter(f)}
+              className="flex-shrink-0 text-xs px-3 py-1 rounded-full font-semibold border transition-all"
+              style={{
+                background: filter === f ? "var(--fraction-green)" : "#fff",
+                color: filter === f ? "#fff" : "var(--fraction-text)",
+                borderColor: filter === f ? "var(--fraction-green)" : "var(--fraction-border)",
+              }}
+            >
+              {f} {counts[f] > 0 && <span className="opacity-70">· {counts[f]}</span>}
+            </button>
+          ))}
         </div>
 
         {/* Desktop header */}

@@ -138,7 +138,7 @@ export default function DailyBriefPanel({ show, emails, onClose }: Props) {
       <div
         className="fixed inset-y-0 right-0 z-50 flex flex-col"
         style={{
-          width: 460,
+          width: "min(460px, 100vw)",
           background: "#fff",
           boxShadow: "-4px 0 40px rgba(26,46,26,0.12)",
           transform: show ? "translateX(0)" : "translateX(100%)",
