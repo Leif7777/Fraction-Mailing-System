@@ -1,13 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Redis } from "@upstash/redis";
-import { Resend } from "resend";
 
 const kv = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL!,
   token: process.env.UPSTASH_REDIS_REST_TOKEN!,
 });
-
-const resend = new Resend(process.env.RESEND_API_KEY!);
 
 function parseFrom(raw: string): { name: string; email: string } {
   const match = raw.match(/^(.+?)\s*<(.+?)>$/);
@@ -41,11 +38,13 @@ export async function POST(req: NextRequest) {
     let body = data.text || (data.html ? stripHtml(data.html) : "");
 
     if (!body && emailId) {
-      const { data: full, error } = await resend.emails.get(emailId);
-      console.log("Resend API fetch:", JSON.stringify({ full, error }, null, 2));
-      if (full) {
-        body = full.text ?? (full.html ? stripHtml(full.html) : "");
-      }
+      // Resend webhook doesn't include body — must fetch from receiving API
+      const res = await fetch(`https://api.resend.com/emails/receiving/${emailId}`, {
+        headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}` },
+      });
+      const full = await res.json();
+      console.log("Resend receiving API fetch:", JSON.stringify(full, null, 2));
+      body = full.text || (full.html ? stripHtml(full.html) : "");
     }
 
     const newEmail = {
