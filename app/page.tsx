@@ -374,7 +374,7 @@ export default function Home() {
       </aside>
 
       {/* ── Email list ── */}
-      <section className={`${mobileView === "detail" ? "hidden md:flex" : "flex"} flex-col border-r overflow-hidden md:w-80 w-full`} style={{ background: "#fff", borderColor: "var(--fraction-border)" }}>
+      <section className={`${mobileView === "detail" ? "mobile-hide" : ""} flex flex-col border-r overflow-hidden md:w-80 w-full`} style={{ background: "#fff", borderColor: "var(--fraction-border)" }}>
 
         {/* Mobile top bar */}
         <div className="md:hidden flex items-center justify-between px-4 py-3 border-b" style={{ borderColor: "var(--fraction-border)" }}>
@@ -496,7 +496,7 @@ export default function Home() {
       </section>
 
       {/* ── Reading pane ── */}
-      <main className={`${mobileView === "list" ? "hidden md:flex" : "flex"} flex-1 flex-col overflow-hidden`}>
+      <main className={`${mobileView === "list" ? "mobile-hide" : ""} flex flex-1 flex-col overflow-hidden`}>
         {selected ? (
           <>
             <div className="bg-white border-b px-4 md:px-8 py-4 md:py-6" style={{ borderColor: "var(--fraction-border)" }}>

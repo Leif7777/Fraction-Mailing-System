@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+/* Mobile panel switching — more reliable than dynamic Tailwind classes */
+@media (max-width: 767px) {
+  .mobile-hide { display: none !important; }
+}
+
 :root {
   --fraction-green: #82c882;
   --fraction-green-dark: #5faa5f;
